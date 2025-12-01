@@ -35,7 +35,7 @@ export class CanvasRendererService {
 
     ctx.beginPath();
     displayData.forEach((d, i) => {
-      const x = scales.x(d.timestamp ? d.timestamp.getTime() : 0) as number;
+      const x = (scales.x as any)(d.timestamp ? d.timestamp.getTime() : 0) as number;
       const y = scales.y(d.value);
 
       if (i === 0) {
@@ -70,7 +70,7 @@ export class CanvasRendererService {
     ctx.fillStyle = color;
 
     displayData.forEach((d) => {
-      const x = scales.x(d.timestamp ? d.timestamp.getTime() : 0) as number;
+      const x = (scales.x as any)(d.timestamp ? d.timestamp.getTime() : 0) as number;
       const y = scales.y(d.value);
 
       ctx.beginPath();
@@ -107,7 +107,7 @@ export class CanvasRendererService {
     // Draw area
     ctx.beginPath();
     displayData.forEach((d, i) => {
-      const x = scales.x(d.timestamp ? d.timestamp.getTime() : 0) as number;
+      const x = (scales.x as any)(d.timestamp ? d.timestamp.getTime() : 0) as number;
       const y = scales.y(d.value);
 
       if (i === 0) {
@@ -119,13 +119,13 @@ export class CanvasRendererService {
 
     // Close the path
     if (displayData.length > 0) {
-      const lastX = scales.x(
+      const lastX = (scales.x as any)(
         displayData[displayData.length - 1].timestamp
           ? displayData[displayData.length - 1].timestamp!.getTime()
           : 0
       ) as number;
       ctx.lineTo(lastX, scales.innerHeight);
-      ctx.lineTo(scales.x(displayData[0].timestamp ? displayData[0].timestamp.getTime() : 0) as number, scales.innerHeight);
+      ctx.lineTo((scales.x as any)(displayData[0].timestamp ? displayData[0].timestamp.getTime() : 0) as number, scales.innerHeight);
       ctx.closePath();
     }
 

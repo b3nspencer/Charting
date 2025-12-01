@@ -8,7 +8,7 @@ import { DashboardStateService } from '../core/services';
 
 export class BrushPlugin implements IChartPlugin {
   readonly id = 'brush';
-  private brush: d3.Brush<SVGGElement> | null = null;
+  private brush: any | null = null;
   private dashboardState: DashboardStateService;
 
   constructor(dashboardState: DashboardStateService) {

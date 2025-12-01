@@ -25,9 +25,10 @@ export class ChartSerializationService {
    * Serialize chart configuration to JSON string
    */
   serialize(config: ChartConfig): string {
+    const { type, ...restConfig } = config;
     const serialized: SerializedConfig = {
       version: this.VERSION,
-      type: config.type || 'line',
+      type: type || 'line',
       dimensions: {
         width: config.width || 800,
         height: config.height || 400,
@@ -35,7 +36,7 @@ export class ChartSerializationService {
       series: config.series || [],
       axes: config.yAxes || [],
       features: config.features || {},
-      ...config,
+      ...restConfig,
     };
 
     return JSON.stringify(serialized);

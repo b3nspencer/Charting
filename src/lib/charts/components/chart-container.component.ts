@@ -33,32 +33,32 @@ import { ChartConfig, DataPoint } from '../core/interfaces';
       <div class="chart-wrapper">
         <app-line-chart
           *ngIf="chartType() === 'line'"
-          [data]="chartData()"
-          [config]="chartConfig()"
+          [inputData]="chartData()"
+          [inputConfig]="chartConfig()"
         ></app-line-chart>
 
         <app-bar-chart
           *ngIf="chartType() === 'bar'"
-          [data]="chartData()"
-          [config]="chartConfig()"
+          [inputData]="chartData()"
+          [inputConfig]="chartConfig()"
         ></app-bar-chart>
 
         <app-scatter-chart
           *ngIf="chartType() === 'scatter'"
-          [data]="chartData()"
-          [config]="chartConfig()"
+          [inputData]="chartData()"
+          [inputConfig]="chartConfig()"
         ></app-scatter-chart>
 
         <app-area-chart
           *ngIf="chartType() === 'area'"
-          [data]="chartData()"
-          [config]="chartConfig()"
+          [inputData]="chartData()"
+          [inputConfig]="chartConfig()"
         ></app-area-chart>
       </div>
 
       <app-legend
         *ngIf="showLegend && chartConfig().series"
-        [series]="chartConfig().series"
+        [series]="chartConfig().series || []"
         (seriesToggled)="onSeriesToggled($event)"
       ></app-legend>
 
@@ -105,11 +105,23 @@ import { ChartConfig, DataPoint } from '../core/interfaces';
 })
 export class ChartContainerComponent {
   @Input() title?: string;
-  @Input() chartType = signal<'line' | 'bar' | 'scatter' | 'area'>('line');
-  @Input() chartData = signal<DataPoint[]>([]);
-  @Input() chartConfig = signal<ChartConfig>({ type: 'line' });
+  chartType = signal<'line' | 'bar' | 'scatter' | 'area'>('line');
+  chartData = signal<DataPoint[]>([]);
+  chartConfig = signal<ChartConfig>({ type: 'line' });
   @Input() showLegend = true;
   @Input() showTooltip = true;
+
+  @Input() set inputChartType(value: 'line' | 'bar' | 'scatter' | 'area') {
+    this.chartType.set(value);
+  }
+
+  @Input() set inputChartData(value: DataPoint[]) {
+    this.chartData.set(value);
+  }
+
+  @Input() set inputChartConfig(value: ChartConfig) {
+    this.chartConfig.set(value);
+  }
 
   readonly tooltipData = signal<DataPoint | null>(null);
   readonly tooltipX = signal(0);

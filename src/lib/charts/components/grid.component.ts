@@ -2,7 +2,7 @@
  * Grid component for displaying grid lines
  */
 
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import * as d3 from 'd3';
 
 interface GridConfig {
@@ -18,6 +18,7 @@ interface GridConfig {
   standalone: true,
   template: `<g #gridGroup class="grid"></g>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  schemas: [NO_ERRORS_SCHEMA],
 })
 export class GridComponent implements AfterViewInit {
   @ViewChild('gridGroup') gridGroup!: ElementRef<SVGGElement>;

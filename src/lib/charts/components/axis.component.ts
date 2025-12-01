@@ -2,7 +2,7 @@
  * Axis component for rendering D3 axes
  */
 
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import * as d3 from 'd3';
 import { AxisConfig } from '../core/interfaces';
 
@@ -11,6 +11,7 @@ import { AxisConfig } from '../core/interfaces';
   standalone: true,
   template: `<g #axisGroup class="axis"></g>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  schemas: [NO_ERRORS_SCHEMA],
 })
 export class AxisComponent implements AfterViewInit, OnDestroy {
   @ViewChild('axisGroup') axisGroup!: ElementRef<SVGGElement>;

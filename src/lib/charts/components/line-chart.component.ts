@@ -32,12 +32,12 @@ import { ChartConfig, DataPoint } from '../core/interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LineChartComponent extends BaseChartComponent {
-  @Input() set data(value: DataPoint[]) {
-    this.chartData.set(value);
+  @Input() set inputData(value: DataPoint[]) {
+    this.updateData(value);
   }
 
-  @Input() set config(value: Partial<ChartConfig>) {
-    this.chartConfig.update((current) => ({ ...current, ...value }));
+  @Input() set inputConfig(value: Partial<ChartConfig>) {
+    this.updateConfig(value);
   }
 
   private strategy: LineChartStrategy | null = null;
@@ -62,7 +62,7 @@ export class LineChartComponent extends BaseChartComponent {
     this.strategy.update(this.chartData(), scales);
   }
 
-  protected cleanupChart(): void {
+  protected override cleanupChart(): void {
     if (this.strategy) {
       this.strategy.destroy();
       this.strategy = null;

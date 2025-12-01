@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 import { DataPoint, ChartScales, IChartStrategy } from '../core/interfaces';
 
 export class AreaChartStrategy implements IChartStrategy {
-  private path: d3.Selection<SVGPathElement, DataPoint[], null, undefined> | null = null;
+  private path: d3.Selection<SVGPathElement, DataPoint[], any, any> | null = null;
   private data: DataPoint[] = [];
   private color: string = 'steelblue';
   private opacity: number = 0.6;

@@ -26,9 +26,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Revenue Over Time"
-            [chartType]="revenueChartType"
-            [chartData]="revenueData()"
-            [chartConfig]="revenueConfig()"
+            [inputChartType]="revenueChartType()"
+            [inputChartData]="revenueData()"
+            [inputChartConfig]="revenueConfig()"
             [showLegend]="true"
             [showTooltip]="true"
           ></app-chart-container>
@@ -37,9 +37,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Sales by Category"
-            [chartType]="categoryChartType"
-            [chartData]="categoryData()"
-            [chartConfig]="categoryConfig()"
+            [inputChartType]="categoryChartType()"
+            [inputChartData]="categoryData()"
+            [inputChartConfig]="categoryConfig()"
             [showLegend]="false"
             [showTooltip]="true"
           ></app-chart-container>
@@ -48,9 +48,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Customer Correlation"
-            [chartType]="scatterChartType"
-            [chartData]="scatterData()"
-            [chartConfig]="scatterConfig()"
+            [inputChartType]="scatterChartType()"
+            [inputChartData]="scatterData()"
+            [inputChartConfig]="scatterConfig()"
             [showLegend]="false"
             [showTooltip]="true"
           ></app-chart-container>
@@ -59,9 +59,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Growth Trend"
-            [chartType]="areaChartType"
-            [chartData]="areaData()"
-            [chartConfig]="areaConfig()"
+            [inputChartType]="areaChartType()"
+            [inputChartData]="areaData()"
+            [inputChartConfig]="areaConfig()"
             [showLegend]="true"
             [showTooltip]="true"
           ></app-chart-container>
@@ -70,9 +70,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Monthly Performance"
-            [chartType]="barChartType"
-            [chartData]="barData()"
-            [chartConfig]="barConfig()"
+            [inputChartType]="barChartType()"
+            [inputChartData]="barData()"
+            [inputChartConfig]="barConfig()"
             [showLegend]="false"
             [showTooltip]="true"
           ></app-chart-container>
@@ -81,9 +81,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Market Distribution"
-            [chartType]="distributionChartType"
-            [chartData]="distributionData()"
-            [chartConfig]="distributionConfig()"
+            [inputChartType]="distributionChartType()"
+            [inputChartData]="distributionData()"
+            [inputChartConfig]="distributionConfig()"
             [showLegend]="false"
             [showTooltip]="true"
           ></app-chart-container>
@@ -92,9 +92,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Product Sales"
-            [chartType]="productChartType"
-            [chartData]="productData()"
-            [chartConfig]="productConfig()"
+            [inputChartType]="productChartType()"
+            [inputChartData]="productData()"
+            [inputChartConfig]="productConfig()"
             [showLegend]="true"
             [showTooltip]="true"
           ></app-chart-container>
@@ -103,9 +103,9 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         <div class="chart-tile">
           <app-chart-container
             title="Quarterly Results"
-            [chartType]="quarterlyChartType"
-            [chartData]="quarterlyData()"
-            [chartConfig]="quarterlyConfig()"
+            [inputChartType]="quarterlyChartType()"
+            [inputChartData]="quarterlyData()"
+            [inputChartConfig]="quarterlyConfig()"
             [showLegend]="false"
             [showTooltip]="true"
           ></app-chart-container>

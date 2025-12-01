@@ -74,7 +74,7 @@ export abstract class BaseChartComponent
   // Internal state
   readonly id = `chart-${Math.random().toString(36).substr(2, 9)}`;
   protected viewInitialized = false;
-  protected chartGroup: d3.Selection<SVGGElement, unknown, HTMLElement, any> | null =
+  protected chartGroup: d3.Selection<SVGGElement, unknown, any, any> | null =
     null;
 
   get config(): ChartConfig {
@@ -150,7 +150,7 @@ export abstract class BaseChartComponent
       const timestamps = data.map((d) => d.timestamp!);
       xScale = d3
         .scaleTime()
-        .domain([Math.min(...timestamps), Math.max(...timestamps)])
+        .domain([Math.min(...(timestamps as any)), Math.max(...(timestamps as any))])
         .range([0, this.innerWidth()]);
     } else if (hasCategory) {
       const categories = data.map((d) => d.category!);

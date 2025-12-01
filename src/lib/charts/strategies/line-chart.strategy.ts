@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 import { DataPoint, ChartScales, IChartStrategy } from '../core/interfaces';
 
 export class LineChartStrategy implements IChartStrategy {
-  private path: d3.Selection<SVGPathElement, DataPoint[], null, undefined> | null = null;
+  private path: d3.Selection<SVGPathElement, DataPoint[], any, any> | null = null;
   private data: DataPoint[] = [];
   private color: string = 'steelblue';
   private strokeWidth: number = 2;
@@ -33,9 +33,9 @@ export class LineChartStrategy implements IChartStrategy {
 
     const selection = d3.select(container);
 
-    this.path = (selection
-      .selectAll<SVGPathElement, DataPoint[]>('path.line-path')
-      .data([data] as any))
+    this.path = (selection as any)
+      .selectAll('path.line-path')
+      .data([data] as any)
       .join('path')
       .attr('class', 'line-path')
       .attr('fill', 'none')
@@ -43,7 +43,7 @@ export class LineChartStrategy implements IChartStrategy {
       .attr('stroke-width', this.strokeWidth)
       .attr('stroke-linejoin', 'round')
       .attr('stroke-linecap', 'round')
-      .attr('d', lineGenerator as any);
+      .attr('d', lineGenerator as any) as any;
   }
 
   update(data: DataPoint[], scales: ChartScales): void {
