@@ -4,10 +4,12 @@
  * Half-hourly consumption data and monthly generation data spanning 2 years
  */
 
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CompositeChartComponent, DataPoint } from '../lib/charts';
 import { StackedBarChartStrategy, ConsumptionLineStrategy } from '../lib/charts/strategies';
+import { DashboardStateService } from '../lib/charts/core/services';
+import { ZoomPlugin } from '../lib/charts/plugins/zoom.plugin';
 
 @Component({
   selector: 'app-power-sample',
@@ -24,6 +26,7 @@ import { StackedBarChartStrategy, ConsumptionLineStrategy } from '../lib/charts/
           [inputChartConfig]="chartConfig()"
           [overlayData]="consumptionData()"
           [strategies]="strategies()"
+          [plugins]="plugins()"
         ></app-composite-chart>
       </div>
 
@@ -161,10 +164,13 @@ import { StackedBarChartStrategy, ConsumptionLineStrategy } from '../lib/charts/
   ],
 })
 export class PowerSampleComponent implements OnInit {
+  private dashboardState = inject(DashboardStateService);
+
   // Data signals
   consumptionData = signal<DataPoint[]>([]);
   generationData = signal<DataPoint[]>([]);
   strategies = signal<any[]>([]);
+  plugins = signal<any[]>([]);
 
   // Config signal
   chartConfig = signal<any>({
@@ -176,6 +182,7 @@ export class PowerSampleComponent implements OnInit {
   ngOnInit(): void {
     this.generatePowerData();
     this.initializeStrategies();
+    this.initializePlugins();
   }
 
   private generatePowerData(): void {
@@ -200,6 +207,14 @@ export class PowerSampleComponent implements OnInit {
 
     // Set strategies array
     this.strategies.set([stackedBarStrategy, consumptionLineStrategy]);
+  }
+
+  private initializePlugins(): void {
+    // Create zoom plugin for interactive zoom/pan functionality
+    const zoomPlugin = new ZoomPlugin(this.dashboardState);
+
+    // Set plugins array
+    this.plugins.set([zoomPlugin]);
   }
 
   private generateConsumptionTimeSeries(): DataPoint[] {

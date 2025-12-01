@@ -3,7 +3,7 @@
  * Allows overlaying different chart types (e.g., line on stacked bars)
  */
 
-import { Component, Input, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, signal, AfterViewInit } from '@angular/core';
 import { BaseChartComponent } from '../core/base';
 import { IChartStrategy } from '../core/interfaces';
 import { ChartConfig, DataPoint } from '../core/interfaces';
@@ -49,8 +49,27 @@ export class CompositeChartComponent extends BaseChartComponent {
     this.strategiesSignal.set(value);
   }
 
+  @Input() set plugins(value: any[]) {
+    if (value && value.length > 0 && this.viewInitialized) {
+      this.registerPlugins(value);
+    } else if (value && value.length > 0) {
+      // Store for later registration if not yet initialized
+      this.pendingPlugins = value;
+    }
+  }
+
   private strategiesSignal = signal<IChartStrategy[]>([]);
   private overlayDataSignal = signal<DataPoint[]>([]);
+  private pendingPlugins: any[] = [];
+
+  override ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    // Register any pending plugins after view is initialized
+    if (this.pendingPlugins.length > 0) {
+      this.registerPlugins(this.pendingPlugins);
+      this.pendingPlugins = [];
+    }
+  }
 
   protected createChart(): void {
     const strategies = this.strategiesSignal();

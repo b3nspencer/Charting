@@ -16,7 +16,7 @@ import {
   signal,
 } from '@angular/core';
 import * as d3 from 'd3';
-import { IChart, ChartConfig, ChartScales, DataPoint, Margin } from '../interfaces';
+import { IChart, ChartConfig, ChartScales, DataPoint, Margin, IChartPlugin } from '../interfaces';
 
 @Component({
   selector: 'app-base-chart',
@@ -80,6 +80,7 @@ export abstract class BaseChartComponent
     null;
   protected yAxisGroup: d3.Selection<SVGGElement, unknown, any, any> | null =
     null;
+  protected pluginList: IChartPlugin[] = [];
 
   get config(): ChartConfig {
     return this.chartConfig();
@@ -113,11 +114,20 @@ export abstract class BaseChartComponent
 
   ngOnDestroy(): void {
     this.viewInitialized = false;
+    // Call beforeDestroy hooks on plugins
+    for (const plugin of this.pluginList) {
+      plugin.beforeDestroy?.(this);
+    }
     this.cleanupChart();
   }
 
   private initializeChart(): void {
     const svg = d3.select(this.chartSvg.nativeElement) as any;
+
+    // Call beforeInit hooks on plugins
+    for (const plugin of this.pluginList) {
+      plugin.beforeInit?.(this);
+    }
 
     // Create main group with margins
     this.chartGroup = svg
@@ -137,6 +147,11 @@ export abstract class BaseChartComponent
 
     this.createChart();
     this.renderAxes();
+
+    // Call afterInit hooks on plugins
+    for (const plugin of this.pluginList) {
+      plugin.afterInit?.(this);
+    }
   }
 
   protected abstract createChart(): void;
@@ -241,6 +256,20 @@ export abstract class BaseChartComponent
    */
   getSvgElement(): SVGSVGElement | null {
     return this.chartSvg?.nativeElement || null;
+  }
+
+  /**
+   * Register a plugin with the chart
+   */
+  registerPlugin(plugin: IChartPlugin): void {
+    this.pluginList.push(plugin);
+  }
+
+  /**
+   * Register multiple plugins
+   */
+  registerPlugins(plugins: IChartPlugin[]): void {
+    this.pluginList.push(...plugins);
   }
 
   /**
