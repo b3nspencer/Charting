@@ -76,6 +76,10 @@ export abstract class BaseChartComponent
   protected viewInitialized = false;
   protected chartGroup: d3.Selection<SVGGElement, unknown, any, any> | null =
     null;
+  protected xAxisGroup: d3.Selection<SVGGElement, unknown, any, any> | null =
+    null;
+  protected yAxisGroup: d3.Selection<SVGGElement, unknown, any, any> | null =
+    null;
 
   get config(): ChartConfig {
     return this.chartConfig();
@@ -96,6 +100,7 @@ export abstract class BaseChartComponent
 
         if (data.length > 0 && this.chartGroup) {
           this.updateChart();
+          this.renderAxes();
         }
       }
     });
@@ -112,14 +117,26 @@ export abstract class BaseChartComponent
   }
 
   private initializeChart(): void {
-    const svg = d3.select(this.chartSvg.nativeElement);
+    const svg = d3.select(this.chartSvg.nativeElement) as any;
 
     // Create main group with margins
     this.chartGroup = svg
       .append('g')
       .attr('transform', `translate(${this.margin().left},${this.margin().top})`);
 
+    // Create axis groups
+    this.xAxisGroup = svg
+      .append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(${this.margin().left},${this.margin().top + this.innerHeight()})`);
+
+    this.yAxisGroup = svg
+      .append('g')
+      .attr('class', 'y-axis')
+      .attr('transform', `translate(${this.margin().left},${this.margin().top})`);
+
     this.createChart();
+    this.renderAxes();
   }
 
   protected abstract createChart(): void;
@@ -240,6 +257,34 @@ export abstract class BaseChartComponent
     if (this.chartGroup) {
       this.chartGroup.selectAll('*').remove();
       this.chartGroup = null;
+    }
+  }
+
+  /**
+   * Render chart axes
+   */
+  protected renderAxes(): void {
+    const scales = this.getScales();
+
+    if (this.xAxisGroup) {
+      const xAxis = d3.axisBottom(scales.x as any);
+      (this.xAxisGroup as any).call(xAxis);
+
+      // Style x-axis
+      this.xAxisGroup
+        .selectAll('text')
+        .style('text-anchor', 'middle')
+        .style('font-size', '12px');
+    }
+
+    if (this.yAxisGroup) {
+      const yAxis = d3.axisLeft(scales.y);
+      (this.yAxisGroup as any).call(yAxis);
+
+      // Style y-axis
+      this.yAxisGroup
+        .selectAll('text')
+        .style('font-size', '12px');
     }
   }
 }
