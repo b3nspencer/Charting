@@ -17,7 +17,10 @@ import { ChartDetailService } from './chart-detail.service';
   ],
   template: `
     <div class="dashboard">
-      <h1>Enterprise Charting Dashboard</h1>
+      <div class="dashboard-header">
+        <h1>Enterprise Charting Dashboard</h1>
+        <a class="complex-sample-link" (click)="navigateTo('/complex')">View Complex Power Sample</a>
+      </div>
 
       <div class="dashboard-grid">
         <div class="chart-tile" (click)="openChartDetail('revenue', 'Revenue Over Time', revenueChartType(), revenueData(), revenueConfig())">
@@ -133,10 +136,34 @@ import { ChartDetailService } from './chart-detail.service';
         min-height: 100vh;
       }
 
-      h1 {
-        text-align: center;
-        color: #333;
+      .dashboard-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
         margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      h1 {
+        color: #333;
+        margin: 0;
+        font-size: 28px;
+      }
+
+      .complex-sample-link {
+        padding: 10px 20px;
+        background: #FF9800;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.2s;
+        text-decoration: none;
+      }
+
+      .complex-sample-link:hover {
+        background: #F57C00;
       }
 
       .dashboard-grid {
@@ -353,5 +380,9 @@ export class ExampleDashboardComponent implements OnInit {
       config,
     });
     this.router.navigate(['/chart', id]);
+  }
+
+  navigateTo(path: string): void {
+    this.router.navigateByUrl(path);
   }
 }

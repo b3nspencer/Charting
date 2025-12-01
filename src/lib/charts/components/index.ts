@@ -7,6 +7,7 @@ export * from './bar-chart.component';
 export * from './scatter-chart.component';
 export * from './area-chart.component';
 export * from './stacked-bar-chart.component';
+export * from './composite-chart.component';
 export * from './axis.component';
 export * from './legend.component';
 export * from './tooltip.component';
