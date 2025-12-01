@@ -4,8 +4,9 @@
 
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LineChartComponent, BarChartComponent, ScatterChartComponent, AreaChartComponent, ChartContainerComponent } from '../lib/charts';
-import { DataPoint, DashboardStateService } from '../lib/charts';
+import { Router } from '@angular/router';
+import { ChartContainerComponent, DataPoint, DashboardStateService } from '../lib/charts';
+import { ChartDetailService } from './chart-detail.service';
 
 @Component({
   selector: 'app-example-dashboard',
@@ -23,7 +24,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
       <h1>Enterprise Charting Dashboard</h1>
 
       <div class="dashboard-grid">
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('revenue', 'Revenue Over Time', revenueChartType(), revenueData(), revenueConfig())">
           <app-chart-container
             title="Revenue Over Time"
             [inputChartType]="revenueChartType()"
@@ -34,7 +35,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('category', 'Sales by Category', categoryChartType(), categoryData(), categoryConfig())">
           <app-chart-container
             title="Sales by Category"
             [inputChartType]="categoryChartType()"
@@ -45,7 +46,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('scatter', 'Customer Correlation', scatterChartType(), scatterData(), scatterConfig())">
           <app-chart-container
             title="Customer Correlation"
             [inputChartType]="scatterChartType()"
@@ -56,7 +57,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('area', 'Growth Trend', areaChartType(), areaData(), areaConfig())">
           <app-chart-container
             title="Growth Trend"
             [inputChartType]="areaChartType()"
@@ -67,7 +68,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('bar', 'Monthly Performance', barChartType(), barData(), barConfig())">
           <app-chart-container
             title="Monthly Performance"
             [inputChartType]="barChartType()"
@@ -78,7 +79,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('distribution', 'Market Distribution', distributionChartType(), distributionData(), distributionConfig())">
           <app-chart-container
             title="Market Distribution"
             [inputChartType]="distributionChartType()"
@@ -89,7 +90,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('product', 'Product Sales', productChartType(), productData(), productConfig())">
           <app-chart-container
             title="Product Sales"
             [inputChartType]="productChartType()"
@@ -100,7 +101,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('quarterly', 'Quarterly Results', quarterlyChartType(), quarterlyData(), quarterlyConfig())">
           <app-chart-container
             title="Quarterly Results"
             [inputChartType]="quarterlyChartType()"
@@ -111,7 +112,7 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
           ></app-chart-container>
         </div>
 
-        <div class="chart-tile">
+        <div class="chart-tile" (click)="openChartDetail('stackedbar', 'Revenue by Region', stackedBarChartType(), stackedBarData(), stackedBarConfig())">
           <app-chart-container
             title="Revenue by Region"
             [inputChartType]="stackedBarChartType()"
@@ -155,6 +156,13 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         height: 400px;
         overflow: hidden;
+        cursor: pointer;
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+
+      .chart-tile:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
       }
 
       .dashboard-footer {
@@ -173,7 +181,11 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
   ],
 })
 export class ExampleDashboardComponent implements OnInit {
-  constructor(readonly dashboardState: DashboardStateService) {}
+  constructor(
+    readonly dashboardState: DashboardStateService,
+    private router: Router,
+    private chartDetailService: ChartDetailService
+  ) {}
 
   // Chart types
   revenueChartType = signal<'line'>('line');
@@ -328,5 +340,22 @@ export class ExampleDashboardComponent implements OnInit {
       };
     });
     this.stackedBarData.set(stackedBarData as any);
+  }
+
+  openChartDetail(
+    id: string,
+    title: string,
+    type: 'line' | 'bar' | 'scatter' | 'area' | 'stacked-bar',
+    data: DataPoint[],
+    config: any
+  ): void {
+    this.chartDetailService.setChartDetail({
+      id,
+      title,
+      type,
+      data,
+      config,
+    });
+    this.router.navigate(['/chart', id]);
   }
 }
