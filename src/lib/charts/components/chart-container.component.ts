@@ -8,6 +8,7 @@ import { LineChartComponent } from './line-chart.component';
 import { BarChartComponent } from './bar-chart.component';
 import { ScatterChartComponent } from './scatter-chart.component';
 import { AreaChartComponent } from './area-chart.component';
+import { StackedBarChartComponent } from './stacked-bar-chart.component';
 import { LegendComponent } from './legend.component';
 import { TooltipComponent } from './tooltip.component';
 import { ChartConfig, DataPoint } from '../core/interfaces';
@@ -21,6 +22,7 @@ import { ChartConfig, DataPoint } from '../core/interfaces';
     BarChartComponent,
     ScatterChartComponent,
     AreaChartComponent,
+    StackedBarChartComponent,
     LegendComponent,
     TooltipComponent,
   ],
@@ -54,6 +56,14 @@ import { ChartConfig, DataPoint } from '../core/interfaces';
           [inputData]="chartData()"
           [inputConfig]="chartConfig()"
         ></app-area-chart>
+
+        <app-stacked-bar-chart
+          *ngIf="chartType() === 'stacked-bar'"
+          [inputData]="chartData()"
+          [inputConfig]="chartConfig()"
+          [stackKeys]="chartConfig()['stackKeys'] || []"
+          [stackColors]="chartConfig()['stackColors'] || []"
+        ></app-stacked-bar-chart>
       </div>
 
       <app-legend
@@ -105,13 +115,13 @@ import { ChartConfig, DataPoint } from '../core/interfaces';
 })
 export class ChartContainerComponent {
   @Input() title?: string;
-  chartType = signal<'line' | 'bar' | 'scatter' | 'area'>('line');
+  chartType = signal<'line' | 'bar' | 'scatter' | 'area' | 'stacked-bar'>('line');
   chartData = signal<DataPoint[]>([]);
   chartConfig = signal<ChartConfig>({ type: 'line' });
   @Input() showLegend = true;
   @Input() showTooltip = true;
 
-  @Input() set inputChartType(value: 'line' | 'bar' | 'scatter' | 'area') {
+  @Input() set inputChartType(value: 'line' | 'bar' | 'scatter' | 'area' | 'stacked-bar') {
     this.chartType.set(value);
   }
 

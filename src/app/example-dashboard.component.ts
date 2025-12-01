@@ -110,6 +110,17 @@ import { DataPoint, DashboardStateService } from '../lib/charts';
             [showTooltip]="true"
           ></app-chart-container>
         </div>
+
+        <div class="chart-tile">
+          <app-chart-container
+            title="Revenue by Region"
+            [inputChartType]="stackedBarChartType()"
+            [inputChartData]="stackedBarData()"
+            [inputChartConfig]="stackedBarConfig()"
+            [showLegend]="true"
+            [showTooltip]="true"
+          ></app-chart-container>
+        </div>
       </div>
 
       <div class="dashboard-footer">
@@ -173,6 +184,7 @@ export class ExampleDashboardComponent implements OnInit {
   distributionChartType = signal<'line'>('line');
   productChartType = signal<'bar'>('bar');
   quarterlyChartType = signal<'area'>('area');
+  stackedBarChartType = signal<'stacked-bar'>('stacked-bar');
 
   // Data signals
   revenueData = signal<DataPoint[]>([]);
@@ -183,6 +195,7 @@ export class ExampleDashboardComponent implements OnInit {
   distributionData = signal<DataPoint[]>([]);
   productData = signal<DataPoint[]>([]);
   quarterlyData = signal<DataPoint[]>([]);
+  stackedBarData = signal<DataPoint[]>([]);
 
   // Config signals
   revenueConfig = signal<any>({
@@ -219,6 +232,11 @@ export class ExampleDashboardComponent implements OnInit {
     type: 'area',
     color: '#8BC34A',
     opacity: 0.6,
+  });
+  stackedBarConfig = signal<any>({
+    type: 'stacked-bar',
+    stackKeys: ['North', 'South', 'East', 'West'],
+    stackColors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'],
   });
 
   ngOnInit(): void {
@@ -292,5 +310,23 @@ export class ExampleDashboardComponent implements OnInit {
       value: Math.random() * 40 + 10,
     }));
     this.quarterlyData.set(quarterlyData);
+
+    // Generate stacked bar data
+    const stackedBarData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map((month, i) => {
+      const north = Math.random() * 5000 + 2000;
+      const south = Math.random() * 4000 + 1500;
+      const east = Math.random() * 6000 + 2500;
+      const west = Math.random() * 3500 + 1000;
+      return {
+        id: `stacked-${i}`,
+        category: month,
+        value: north + south + east + west,
+        North: north,
+        South: south,
+        East: east,
+        West: west,
+      };
+    });
+    this.stackedBarData.set(stackedBarData as any);
   }
 }
