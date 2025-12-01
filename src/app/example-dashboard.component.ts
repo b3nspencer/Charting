@@ -14,10 +14,6 @@ import { ChartDetailService } from './chart-detail.service';
   imports: [
     CommonModule,
     ChartContainerComponent,
-    LineChartComponent,
-    BarChartComponent,
-    ScatterChartComponent,
-    AreaChartComponent,
   ],
   template: `
     <div class="dashboard">
